@@ -18,15 +18,20 @@ fi
 
 # Create user/group
 if [ -z "${SSHD_USERNAME}" ]; then
-    # set default username
+    # use default username
     SSHD_USERNAME="user"
 fi
-echo "Creating user/group '${SSHD_USERNAME}'"
-addgroup -g 1000 "${SSHD_USERNAME}"
-adduser -u 1000 -G "${SSHD_USERNAME}" -h /share -D "${SSHD_USERNAME}"
-passwd -u "${SSHD_USERNAME}"
+if ! getent passwd "${SSHD_USERNAME}" >/dev/null 2>&1; then
+    echo "Adding user/group '${SSHD_USERNAME}'"
+    addgroup -g 1000 "${SSHD_USERNAME}"
+    adduser -u 1000 -G "${SSHD_USERNAME}" -h /share -D "${SSHD_USERNAME}"
+    passwd -u "${SSHD_USERNAME}"
+else
+    echo "User/Group '${SSHD_USERNAME}' already exists"
+fi
 
 if [ -n "${SSHD_PASSWORD}" ]; then
+    echo "Setting password for user '${SSHD_USERNAME}'"
     echo -e "${SSHD_PASSWORD}\n${SSHD_PASSWORD}" | passwd "${SSHD_USERNAME}"
 fi
 
@@ -54,7 +59,7 @@ else
     done
 fi
 
-# /usr/sbin/sshd -d -e
+# /usr/sbin/sshd -D -e
 /usr/sbin/sshd -V
 
 if [ "$#" -gt 0 ]; then
