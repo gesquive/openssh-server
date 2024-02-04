@@ -54,8 +54,8 @@ else
     done
 fi
 
-# /usr/sbin/sshd
 # /usr/sbin/sshd -d -e
+/usr/sbin/sshd -V
 
 if [ -n "$@" ]; then
     "$@"
