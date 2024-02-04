@@ -57,6 +57,6 @@ fi
 # /usr/sbin/sshd -d -e
 /usr/sbin/sshd -V
 
-if [ -n "$@" ]; then
-    "$@"
+if [ "$#" -gt 0 ]; then
+    exec "$@"
 fi
