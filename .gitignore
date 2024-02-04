@@ -1,0 +1,11 @@
+/bin/*
+vendor/*
+dist/
+scripts/
+
+*.bak
+*.log
+
+config/
+!.circleci/config.yml
+
